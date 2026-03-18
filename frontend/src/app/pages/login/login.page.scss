@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+$font-display: 'Sora', sans-serif;
+$font-body:    'DM Sans', sans-serif;
+
+$emerald:      #10b981;
+$teal:         #0d9488;
+$emerald-dark: #059669;
+$emerald-deep: #047857;
+$bg-page:      #f0faf5;
+$bg-card:      #ffffff;
+$bg-field:     #f9fafb;
+$text-heading: #052e16;
+$text-brand:   #064e3b;
+$text-body:    #111827;
+$text-muted:   #6b7280;
+$text-hint:    #9ca3af;
+$border:       #e5e7eb;
+
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background: $bg-page;
+  position: relative;
+  overflow: hidden;
+  font-family: $font-body;
+}
+
+.bg-orbs { position: absolute; inset: 0; pointer-events: none; }
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  &-1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(16,185,129,.18) 0%, transparent 70%); top: -140px; left: -80px; }
+  &-2 { width: 320px; height: 320px; background: radial-gradient(circle, rgba(20,184,166,.16) 0%, transparent 70%); bottom: -80px; right: -40px; }
+  &-3 { width: 200px; height: 200px; background: radial-gradient(circle, rgba(52,211,153,.12) 0%, transparent 70%); top: 40%; left: 58%; filter: blur(50px); }
+}
+
+.card {
+  position: relative;
+  width: min(420px, 100%);
+  padding: 36px 32px;
+  border-radius: 20px;
+  background: $bg-card;
+  border: 1px solid rgba($emerald, .15);
+  box-shadow: 0 4px 6px rgba(0,0,0,.04), 0 24px 60px rgba($emerald,.1), 0 0 0 1px rgba(255,255,255,.8) inset;
+  animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+
+.brand-icon {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, $emerald, $teal);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba($emerald,.38);
+  svg { width: 17px; height: 17px; }
+}
+
+.brand-name { font-family: $font-display; font-weight: 600; font-size: 17px; color: $text-brand; letter-spacing: -.3px; }
+
+.tab-wrap {
+  display: flex;
+  background: #f0fdf4;
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 24px;
+  border: 1px solid rgba($emerald,.15);
+}
+
+.tab {
+  flex: 1; height: 34px;
+  border-radius: 8px; border: none; cursor: pointer;
+  font-family: $font-body; font-size: 13px; font-weight: 500;
+  color: $text-muted; background: transparent;
+  transition: all 0.2s;
+  &.active { background: #fff; color: $emerald-dark; border: 1px solid rgba($emerald,.25); box-shadow: 0 1px 4px rgba($emerald,.12); }
+}
+
+.title { font-family: $font-display; font-size: 24px; font-weight: 700; color: $text-heading; margin: 0 0 5px; letter-spacing: -.5px; }
+.subtitle { font-size: 13.5px; color: $text-muted; margin: 0 0 24px; }
+
+.form { display: grid; gap: 0; }
+.field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+.field-label { font-size: 11px; font-weight: 500; color: $text-muted; letter-spacing: .7px; text-transform: uppercase; }
+
+.input-wrap { position: relative; display: flex; align-items: center; }
+.input-icon { position: absolute; left: 13px; color: $text-hint; display: flex; pointer-events: none; transition: color .2s; svg { width: 15px; height: 15px; } }
+
+.field-input {
+  width: 100%; height: 46px;
+  padding: 0 14px 0 40px;
+  background: $bg-field; border: 1px solid $border; border-radius: 11px;
+  color: $text-body; font-family: $font-body; font-size: 14px;
+  outline: none; transition: border-color .2s, background .2s, box-shadow .2s;
+  box-sizing: border-box;
+  &::placeholder { color: #d1d5db; }
+  &:focus { border-color: rgba($emerald,.6); background: #fff; box-shadow: 0 0 0 3px rgba($emerald,.1); }
+}
+
+.input-wrap:focus-within .input-icon { color: $emerald; }
+
+.field.error {
+  .field-input { border-color: rgba(239,68,68,.5); background: #fef2f2; }
+  .input-icon { color: #f87171; }
+}
+.field-error { font-size: 11.5px; color: #ef4444; }
+
+.forgot-row { text-align: right; margin: 8px 0 20px; }
+.forgot-link { font-size: 12px; color: $emerald-dark; text-decoration: none; font-weight: 500; &:hover { color: $emerald-deep; } }
+
+.actions { margin-top: 4px; }
+
+.btn-primary {
+  width: 100%; height: 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px; border-radius: 11px; border: none; cursor: pointer;
+  font-family: $font-body; font-size: 14.5px; font-weight: 500;
+  color: #fff; letter-spacing: -.1px;
+  background: linear-gradient(135deg, $emerald 0%, $teal 100%);
+  box-shadow: 0 4px 18px rgba($emerald,.35), 0 1px 0 rgba(255,255,255,.15) inset;
+  position: relative; overflow: hidden;
+  transition: transform .15s, box-shadow .15s;
+  &::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 55%); }
+  &:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 26px rgba($emerald,.45), 0 1px 0 rgba(255,255,255,.15) inset; }
+  &:active:not(:disabled) { transform: translateY(0); }
+  &:disabled { opacity: .5; cursor: not-allowed; }
+}
+
+.btn-arrow { font-size: 17px; opacity: .7; transition: transform .2s, opacity .2s; }
+.btn-primary:hover:not(:disabled) .btn-arrow { transform: translateX(4px); opacity: 1; }
+
+.divider { display: flex; align-items: center; gap: 10px; margin: 22px 0; color: #d1d5db; font-size: 12px;
+  &::before, &::after { content: ''; flex: 1; height: 1px; background: $border; }
+}
+
+.toggle-row { display: flex; align-items: center; justify-content: center; gap: 5px; }
+.toggle-text { font-size: 13px; color: $text-hint; }
+
+.btn-ghost {
+  background: none; border: none; cursor: pointer;
+  font-family: $font-body; font-size: 13px; font-weight: 600;
+  color: $emerald-dark; padding: 0; transition: color .2s;
+  &:hover { color: $emerald-deep; }
+  &:disabled { opacity: .4; cursor: not-allowed; }
+}
