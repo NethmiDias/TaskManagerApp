@@ -1,7 +1,108 @@
-.app-shell {
-  padding: 16px;
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+// ─── Tokens ─────────────────────────────────────────────────────────────────
+$font-display : 'Sora', sans-serif;
+$font-body    : 'DM Sans', sans-serif;
+
+$amber-light  : #fef3c7;
+$amber-mid    : #fbbf24;
+$amber-base   : #f59e0b;
+$amber-dark   : #d97706;
+$amber-deeper : #b45309;
+$text-primary : #fef9ee;
+$text-muted   : rgba(253, 230, 138, 0.38);
+$border-color : rgba(251, 191, 36, 0.1);
+$bg-page      : #0e0a04;
+$navbar-bg    : rgba(14, 10, 4, 0.85);
+
+// ─── Navbar ──────────────────────────────────────────────────────────────────
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: $navbar-bg;
+  border-bottom: 1px solid $border-color;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(251, 191, 36, 0.06), 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
-.spacer {
-  flex: 1 1 auto;
+.navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// ─── Brand ───────────────────────────────────────────────────────────────────
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, $amber-base, $amber-deeper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 12px rgba(217, 119, 6, 0.5);
+  color: #fff;
+  flex-shrink: 0;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.brand-name {
+  font-family: $font-display;
+  font-weight: 600;
+  font-size: 16px;
+  color: $text-primary;
+  letter-spacing: -0.3px;
+}
+
+// ─── Logout button ───────────────────────────────────────────────────────────
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 9px;
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  background: transparent;
+  color: rgba(253, 230, 138, 0.5);
+  font-family: $font-body;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+
+  svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: $amber-light;
+    border-color: rgba(251, 191, 36, 0.3);
+    background: rgba(255, 200, 60, 0.06);
+  }
+}
+
+// ─── App shell ───────────────────────────────────────────────────────────────
+.app-shell {
+  min-height: calc(100vh - 58px);
+  background: $bg-page;
+  font-family: $font-body;
 }

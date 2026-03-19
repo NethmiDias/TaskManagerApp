@@ -1,13 +1,33 @@
-<mat-toolbar color="primary">
-  <span>Task Manager</span>
-  <span class="spacer"></span>
-  @if (isLoggedIn()) {
-    <button mat-button (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      Logout
-    </button>
-  }
-</mat-toolbar>
+<nav class="navbar">
+  <div class="navbar-inner">
+
+    <!-- Brand -->
+    <div class="navbar-brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z"/>
+          <path d="M12 8V16M8 10L12 8L16 10" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="brand-name">Task Manager</span>
+    </div>
+
+    <!-- Actions -->
+    @if (isLoggedIn()) {
+      <button class="btn-logout" (click)="logout()">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
+          xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 3h4a1 1 0 011 1v12a1 1 0 01-1 1h-4" stroke-linecap="round"/>
+          <path d="M8 15l-5-5 5-5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 10h10" stroke-linecap="round"/>
+        </svg>
+        Logout
+      </button>
+    }
+
+  </div>
+</nav>
 
 <div class="app-shell">
   <router-outlet />
