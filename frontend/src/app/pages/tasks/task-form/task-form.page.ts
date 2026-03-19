@@ -1,12 +1,6 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TaskStatus } from '../../../models/task';
 import { TaskService } from '../../../services/task.service';
@@ -15,37 +9,30 @@ import { TaskService } from '../../../services/task.service';
   selector: 'app-task-form-page',
   standalone: true,
   imports: [
-    CommonModule,
     RouterLink,
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
     MatSnackBarModule
   ],
   templateUrl: './task-form.page.html',
   styleUrl: './task-form.page.scss'
 })
 export class TaskFormPage {
-  private readonly fb = inject(FormBuilder);
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-  private readonly tasksApi = inject(TaskService);
-  private readonly snack = inject(MatSnackBar);
+  private readonly fb        = inject(FormBuilder);
+  private readonly route     = inject(ActivatedRoute);
+  private readonly router    = inject(Router);
+  private readonly tasksApi  = inject(TaskService);
+  private readonly snack     = inject(MatSnackBar);
 
   readonly isSubmitting = signal(false);
-  readonly isLoading = signal(false);
-
-  readonly taskId = signal<number | null>(null);
+  readonly isLoading    = signal(false);
+  readonly taskId       = signal<number | null>(null);
 
   readonly statuses: TaskStatus[] = ['TO_DO', 'IN_PROGRESS', 'DONE'];
 
   readonly form = this.fb.nonNullable.group({
-    title: ['', [Validators.required, Validators.maxLength(120)]],
+    title:       ['', [Validators.required, Validators.maxLength(120)]],
     description: ['', [Validators.maxLength(2000)]],
-    status: this.fb.nonNullable.control<TaskStatus>('TO_DO', [Validators.required])
+    status:       this.fb.nonNullable.control<TaskStatus>('TO_DO', [Validators.required])
   });
 
   constructor() {
@@ -68,14 +55,12 @@ export class TaskFormPage {
     try {
       const task = await this.tasksApi.getById(id);
       this.form.patchValue({
-        title: task.title,
+        title:       task.title,
         description: task.description ?? '',
-        status: task.status
+        status:      task.status
       });
     } catch (e: unknown) {
-      this.snack.open(e instanceof Error ? e.message : 'Failed to load task', 'Close', {
-        duration: 4000
-      });
+      this.snack.open(e instanceof Error ? e.message : 'Failed to load task', 'Close', { duration: 4000 });
       await this.router.navigateByUrl('/tasks');
     } finally {
       this.isLoading.set(false);
@@ -90,7 +75,7 @@ export class TaskFormPage {
     try {
       const { title, description, status } = this.form.getRawValue();
       const payload = {
-        title: title.trim(),
+        title:       title.trim(),
         description: description?.trim() ? description.trim() : null,
         status
       };
@@ -110,5 +95,8 @@ export class TaskFormPage {
       this.isSubmitting.set(false);
     }
   }
-}
 
+  formatStatus(s: TaskStatus): string {
+    return s.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+  }
+}

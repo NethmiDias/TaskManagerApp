@@ -1,45 +1,124 @@
-<mat-card>
-  <mat-card-title>
-    @if (isEdit) { Edit Task } @else { New Task }
-  </mat-card-title>
+<div class="wrap">
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
 
-  <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-      <mat-form-field appearance="outline">
-        <mat-label>Title</mat-label>
-        <input matInput formControlName="title" />
-        @if (form.controls.title.touched && form.controls.title.hasError('required')) {
-          <mat-error>Title is required</mat-error>
-        }
-        @if (form.controls.title.touched && form.controls.title.hasError('maxlength')) {
-          <mat-error>Max 120 characters</mat-error>
-        }
-      </mat-form-field>
+  <div class="card">
 
-      <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
-        <textarea matInput rows="4" formControlName="description"></textarea>
-        @if (form.controls.description.touched && form.controls.description.hasError('maxlength')) {
-          <mat-error>Max 2000 characters</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
-        <mat-select formControlName="status">
-          @for (s of statuses; track s) {
-            <mat-option [value]="s">{{ s }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
-      <div class="actions">
-        <a mat-button routerLink="/tasks">Cancel</a>
-        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting()">
-          Save
-        </button>
+    <!-- Brand icon -->
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z"/>
+          <path d="M12 8V16M8 10L12 8L16 10" stroke-linecap="round"/>
+        </svg>
       </div>
-    </form>
-  </mat-card-content>
-</mat-card>
+    </div>
 
+    <!-- Heading -->
+    <h1 class="title">
+      @if (isEdit) { Edit Task } @else { New Task }
+    </h1>
+    <p class="subtitle">
+      @if (isEdit) { Update your task details below } @else { Fill in the details to create a new task }
+    </p>
+
+    <!-- Loading state -->
+    @if (isLoading()) {
+      <div class="loading-wrap">
+        <span class="spinner-lg"></span>
+        <span class="loading-text">Loading task…</span>
+      </div>
+    }
+
+    <!-- Form -->
+    @if (!isLoading()) {
+      <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+
+        <!-- Title -->
+        <div class="field" [class.has-error]="form.controls.title.touched && form.controls.title.invalid">
+          <label class="field-label">Title</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6h12M4 10h8M4 14h6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <input
+              class="field-input"
+              formControlName="title"
+              placeholder="Enter task title"
+            />
+          </div>
+          @if (form.controls.title.touched && form.controls.title.hasError('required')) {
+            <span class="field-error">Title is required</span>
+          }
+          @if (form.controls.title.touched && form.controls.title.hasError('maxlength')) {
+            <span class="field-error">Max 120 characters</span>
+          }
+        </div>
+
+        <!-- Description -->
+        <div class="field" [class.has-error]="form.controls.description.touched && form.controls.description.invalid">
+          <label class="field-label">Description</label>
+          <div class="textarea-wrap">
+            <textarea
+              class="field-textarea"
+              formControlName="description"
+              rows="4"
+              placeholder="Add a description (optional)"
+            ></textarea>
+          </div>
+          @if (form.controls.description.touched && form.controls.description.hasError('maxlength')) {
+            <span class="field-error">Max 2000 characters</span>
+          }
+        </div>
+
+        <!-- Status -->
+        <div class="field">
+          <label class="field-label">Status</label>
+          <div class="select-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="10" r="7"/>
+                <path d="M10 7v3l2 2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <select class="field-select" formControlName="status">
+              @for (s of statuses; track s) {
+                <option [value]="s">{{ formatStatus(s) }}</option>
+              }
+            </select>
+            <span class="select-arrow">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <a class="btn-cancel" routerLink="/tasks">
+            <span>← Cancel</span>
+          </a>
+          <button class="btn-primary" type="submit" [disabled]="isSubmitting()">
+            <span class="btn-label">
+              @if (isSubmitting()) { <span class="spinner"></span> }
+              @if (isEdit) { Update Task } @else { Create Task }
+            </span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </div>
+
+      </form>
+    }
+
+  </div>
+</div>

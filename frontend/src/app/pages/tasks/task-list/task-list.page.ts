@@ -1,12 +1,6 @@
-import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Task, TaskStatus } from '../../../models/task';
 import { TaskService } from '../../../services/task.service';
@@ -15,34 +9,28 @@ import { TaskService } from '../../../services/task.service';
   selector: 'app-task-list-page',
   standalone: true,
   imports: [
-    CommonModule,
     RouterLink,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatTableModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    DatePipe
   ],
   templateUrl: './task-list.page.html',
   styleUrl: './task-list.page.scss'
 })
 export class TaskListPage {
   private readonly tasksApi = inject(TaskService);
-  private readonly snack = inject(MatSnackBar);
+  private readonly snack    = inject(MatSnackBar);
 
-  readonly isLoading = signal(false);
-  readonly tasks = signal<Task[]>([]);
+  readonly isLoading    = signal(false);
+  readonly tasks        = signal<Task[]>([]);
   readonly statusFilter = signal<TaskStatus | 'ALL'>('ALL');
 
   readonly filteredTasks = computed(() => {
     const filter = this.statusFilter();
-    const all = this.tasks();
+    const all    = this.tasks();
     return filter === 'ALL' ? all : all.filter((t) => t.status === filter);
   });
 
-  readonly displayedColumns = ['title', 'status', 'createdAt', 'actions'];
+  readonly statuses: (TaskStatus | 'ALL')[] = ['ALL', 'TO_DO', 'IN_PROGRESS', 'DONE'];
 
   constructor() {
     void this.load();
@@ -52,12 +40,9 @@ export class TaskListPage {
     this.isLoading.set(true);
     try {
       const data = await this.tasksApi.getAll();
-      // newest first
       this.tasks.set([...data].sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
     } catch (e: unknown) {
-      this.snack.open(e instanceof Error ? e.message : 'Failed to load tasks', 'Close', {
-        duration: 4000
-      });
+      this.snack.open(e instanceof Error ? e.message : 'Failed to load tasks', 'Close', { duration: 4000 });
     } finally {
       this.isLoading.set(false);
     }
@@ -70,10 +55,15 @@ export class TaskListPage {
       this.tasks.set(this.tasks().filter((t) => t.id !== task.id));
       this.snack.open('Task deleted', 'Close', { duration: 2000 });
     } catch (e: unknown) {
-      this.snack.open(e instanceof Error ? e.message : 'Failed to delete task', 'Close', {
-        duration: 4000
-      });
+      this.snack.open(e instanceof Error ? e.message : 'Failed to delete task', 'Close', { duration: 4000 });
     }
   }
-}
 
+  formatStatus(s: string): string {
+    return s === 'ALL' ? 'All' : s.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  statusClass(s: TaskStatus): string {
+    return { TO_DO: 'badge-todo', IN_PROGRESS: 'badge-progress', DONE: 'badge-done' }[s] ?? '';
+  }
+}

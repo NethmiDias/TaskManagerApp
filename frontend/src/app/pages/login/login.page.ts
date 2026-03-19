@@ -1,10 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../core/auth/auth.service';
 
@@ -13,10 +9,6 @@ import { AuthService } from '../../core/auth/auth.service';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
     MatSnackBarModule
   ],
   templateUrl: './login.page.html',
@@ -38,6 +30,12 @@ export class LoginPage {
 
   toggleMode() {
     this.mode.set(this.mode() === 'login' ? 'register' : 'login');
+    this.form.reset();
+  }
+
+  setMode(mode: 'login' | 'register') {
+    this.mode.set(mode);
+    this.form.reset();
   }
 
   async submit() {
@@ -62,4 +60,3 @@ export class LoginPage {
     }
   }
 }
-

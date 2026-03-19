@@ -5,103 +5,133 @@
     <div class="orb orb-3"></div>
   </div>
 
-  <div class="card" [class.register-mode]="mode() === 'register'">
-    <!-- Brand mark -->
+  <div class="card">
+
+    <!-- Brand icon only -->
     <div class="brand">
       <div class="brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M12 8V16M8 10L12 8L16 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z"/>
+          <path d="M12 8V16M8 10L12 8L16 10" stroke-linecap="round"/>
         </svg>
       </div>
-      <span class="brand-name">Axiom</span>
     </div>
 
-    <!-- Header -->
-    <div class="card-header">
-      <h1 class="title">
-        @if (mode() === 'login') { Welcome back } @else { Join us today }
-      </h1>
-      <p class="subtitle">
-        @if (mode() === 'login') {
-          Sign in to continue your journey
-        } @else {
-          Create your account and get started
-        }
-      </p>
+    <!-- Tab switcher -->
+    <div class="tab-wrap">
+      <button
+        class="tab"
+        [class.active]="mode() === 'login'"
+        type="button"
+        (click)="setMode('login')"
+        [disabled]="isSubmitting()">
+        Sign in
+      </button>
+      <button
+        class="tab"
+        [class.active]="mode() === 'register'"
+        type="button"
+        (click)="setMode('register')"
+        [disabled]="isSubmitting()">
+        Register
+      </button>
     </div>
+
+    <!-- Heading -->
+    <h1 class="title">
+      @if (mode() === 'login') { Welcome back } @else { Join us today }
+    </h1>
+    <p class="subtitle">
+      @if (mode() === 'login') {
+        Sign in to continue your journey
+      } @else {
+        Create your account and get started
+      }
+    </p>
 
     <!-- Form -->
     <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-      <div class="field-group">
-        <div class="field" [class.error]="form.controls.username.touched && form.controls.username.invalid">
-          <label class="field-label">Username</label>
-          <div class="input-wrap">
-            <span class="input-icon">
-              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M3 17C3 14.239 6.134 12 10 12C13.866 12 17 14.239 17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <input
-              class="field-input"
-              formControlName="username"
-              autocomplete="username"
-              placeholder="Enter your username"
-            />
-          </div>
-          @if (form.controls.username.touched && form.controls.username.invalid) {
-            <span class="field-error">Username is required</span>
-          }
-        </div>
 
-        <div class="field" [class.error]="form.controls.password.touched && form.controls.password.invalid">
-          <label class="field-label">Password</label>
-          <div class="input-wrap">
-            <span class="input-icon">
-              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="4" y="9" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M7 9V6C7 4.343 8.343 3 10 3C11.657 3 13 4.343 13 6V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <circle cx="10" cy="13.5" r="1" fill="currentColor"/>
-              </svg>
-            </span>
-            <input
-              class="field-input"
-              type="password"
-              formControlName="password"
-              autocomplete="current-password"
-              placeholder="Enter your password"
-            />
-          </div>
-          @if (form.controls.password.touched && form.controls.password.invalid) {
-            <span class="field-error">Password is required (min 6 chars)</span>
-          }
+      <!-- Username -->
+      <div class="field" [class.has-error]="form.controls.username.touched && form.controls.username.invalid">
+        <label class="field-label">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
+              xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="7" r="3"/>
+              <path d="M3 17C3 14.239 6.134 12 10 12C13.866 12 17 14.239 17 17" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <input
+            class="field-input"
+            formControlName="username"
+            autocomplete="username"
+            placeholder="Enter your username"
+          />
         </div>
+        @if (form.controls.username.touched && form.controls.username.invalid) {
+          <span class="field-error">
+            @if (form.controls.username.errors?.['required']) { Username is required }
+            @else if (form.controls.username.errors?.['maxlength']) { Max 50 characters }
+          </span>
+        }
       </div>
 
+      <!-- Password -->
+      <div class="field" [class.has-error]="form.controls.password.touched && form.controls.password.invalid">
+        <label class="field-label">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
+              xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="9" width="12" height="9" rx="2"/>
+              <path d="M7 9V6C7 4.343 8.343 3 10 3C11.657 3 13 4.343 13 6V9" stroke-linecap="round"/>
+              <circle cx="10" cy="13.5" r="1" fill="currentColor"/>
+            </svg>
+          </span>
+          <input
+            class="field-input"
+            type="password"
+            formControlName="password"
+            autocomplete="current-password"
+            placeholder="Enter your password"
+          />
+        </div>
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <span class="field-error">
+            @if (form.controls.password.errors?.['required']) { Password is required }
+            @else if (form.controls.password.errors?.['minlength']) { Minimum 6 characters }
+            @else if (form.controls.password.errors?.['maxlength']) { Max 100 characters }
+          </span>
+        }
+      </div>
+
+      <!-- Forgot password (login only) -->
       @if (mode() === 'login') {
         <div class="forgot-row">
           <a href="#" class="forgot-link">Forgot password?</a>
         </div>
       }
 
+      <!-- Submit -->
       <div class="actions">
         <button class="btn-primary" type="submit" [disabled]="isSubmitting()">
           <span class="btn-label">
-            @if (isSubmitting()) {
-              <span class="spinner"></span>
-            }
+            @if (isSubmitting()) { <span class="spinner"></span> }
             @if (mode() === 'login') { Sign in } @else { Create account }
           </span>
           <span class="btn-arrow">→</span>
         </button>
       </div>
+
     </form>
 
     <!-- Divider -->
     <div class="divider"><span>or</span></div>
 
-    <!-- Toggle mode -->
+    <!-- Toggle -->
     <div class="toggle-row">
       <span class="toggle-text">
         @if (mode() === 'login') { Don't have an account? } @else { Already have an account? }
@@ -110,5 +140,6 @@
         @if (mode() === 'login') { Register } @else { Sign in }
       </button>
     </div>
+
   </div>
 </div>
